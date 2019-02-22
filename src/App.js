@@ -1,25 +1,33 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import logo from './logo.png';
 
 class App extends Component {
+  state = {
+    movies: []
+  }
+
+  componentDidMount() {
+    fetch("https://ghibliapi.herokuapp.com/films")
+      .then(response => response.json())
+      .then(data => this.setState({ movies: data }))
+  }
+
   render() {
+    const { movies } = this.state;
+    console.log(movies)
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <img src={logo} alt="" />
+        <div className="container">
+          {movies.map((movie) => (
+            <div className="card" key={movie.id}>
+              <h1>{movie.title}</h1>
+              <p>{movie.description}</p>
+              <h5>Release Date: {movie.release_date}</h5>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
